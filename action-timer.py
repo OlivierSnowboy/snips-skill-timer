@@ -33,9 +33,9 @@ class TimerBase(Thread):
         
             self.wait_seconds = self.get_seconds_from_duration(duration)
         else:
-            text_now = u"Je n'ai pas compris la duré du minuteur, désolé."
+            text_now = u"Je n'ai pas compris la durée du minuteur, désolé."
             hermes.publish_end_session(intentMessage.session_id, text_now)
-            raise Exception('Timer need dutration')
+            raise Exception('Timer need duration')
             
         if intentMessage.slots.sentence:
             self.sentence = intentMessage.slots.sentence.first().rawValue
@@ -153,9 +153,9 @@ class TimerSendNotification(TimerBase):
 
     def callback(self):
         if self.sentence is None:
-            text = u"Le minuteur de {} vient de ce terminer".format(str(self.durationRaw))
+            text = u"Le minuteur de {} vient de se terminer".format(str(self.durationRaw))
         else:
-            text = u"Le minuteur de {} vient de ce terminer je doit vous rappeler de {}".format(
+            text = u"Le minuteur de {} vient de se terminer je dois vous rappeler de {}".format(
                 self.durationRaw, self.sentence)
         
         self.hermes.publish_start_session_notification(site_id=self.site_id, session_init_value=text,
@@ -163,9 +163,9 @@ class TimerSendNotification(TimerBase):
 
     def send_end(self):
         if self.sentence is None:
-            text_now = u"Je vous rappelerais dans {} que le minuteur c'est terminé".format(str(self.durationRaw))
+            text_now = u"Je vous rappellerai dans {} que le minuteur s'est terminé".format(str(self.durationRaw))
         else:
-            text_now = u"Je vous rappelerais dans {} de {}".format(str(self.durationRaw), str(self.sentence))
+            text_now = u"Je vous rappellerai dans {} de {}".format(str(self.durationRaw), str(self.sentence))
         
         self.hermes.publish_end_session(self.session_id, text_now)
 
@@ -180,7 +180,7 @@ class TimerSendAction(TimerBase):
     def send_end(self):
         if self.sentence is None:
             raise Exception('TimerSendAction need sentence with action')
-        text_now = u"Dans {} je ferais l'action: {}".format(str(self.durationRaw), str(self.sentence))
+        text_now = u"Dans {} je ferai l'action: {}".format(str(self.durationRaw), str(self.sentence))
         self.hermes.publish_end_session(self.session_id, text_now)
 
 
