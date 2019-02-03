@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # coding: utf-8
 
 from hermes_python.hermes import Hermes
@@ -33,7 +33,7 @@ class TimerBase(Thread):
         
             self.wait_seconds = self.get_seconds_from_duration(duration)
         else:
-            text_now = u"Je n'ai pas compris la durée du minuteur, désolé."
+            text_now = "Je n'ai pas compris la durée du minuteur, désolé."
             hermes.publish_end_session(intentMessage.session_id, text_now)
             raise Exception('Timer need duration')
             
@@ -132,13 +132,13 @@ class TimerBase(Thread):
 
     def run(self):
 
-        print("[{}] Start timer: wait {} seconds".format(time.time(), self.wait_seconds))
+        print(("[{}] Start timer: wait {} seconds".format(time.time(), self.wait_seconds)))
         self._start_time = time.time()
         time.sleep(self.wait_seconds)
         self.__callback()
 
     def __callback(self):
-        print("[{}] End timer: wait {} seconds".format(time.time(), self.wait_seconds))
+        print(("[{}] End timer: wait {} seconds".format(time.time(), self.wait_seconds)))
         TIMER_LIST.remove(self)
         self.callback()
 
@@ -153,9 +153,9 @@ class TimerSendNotification(TimerBase):
 
     def callback(self):
         if self.sentence is None:
-            text = u"Le minuteur de {} vient de se terminer".format(str(self.durationRaw))
+            text = "Le minuteur de {} vient de se terminer".format(str(self.durationRaw))
         else:
-            text = u"Le minuteur de {} vient de se terminer je dois vous rappeler de {}".format(
+            text = "Le minuteur de {} vient de se terminer je dois vous rappeler de {}".format(
                 self.durationRaw, self.sentence)
         
         self.hermes.publish_start_session_notification(site_id=self.site_id, session_init_value=text,
@@ -163,9 +163,9 @@ class TimerSendNotification(TimerBase):
 
     def send_end(self):
         if self.sentence is None:
-            text_now = u"Je vous rappellerai dans {} que le minuteur s'est terminé".format(str(self.durationRaw))
+            text_now = "Je vous rappellerai dans {} que le minuteur s'est terminé".format(str(self.durationRaw))
         else:
-            text_now = u"Je vous rappellerai dans {} de {}".format(str(self.durationRaw), str(self.sentence))
+            text_now = "Je vous rappellerai dans {} de {}".format(str(self.durationRaw), str(self.sentence))
         
         self.hermes.publish_end_session(self.session_id, text_now)
 
@@ -180,7 +180,7 @@ class TimerSendAction(TimerBase):
     def send_end(self):
         if self.sentence is None:
             raise Exception('TimerSendAction need sentence with action')
-        text_now = u"Dans {} je ferai l'action: {}".format(str(self.durationRaw), str(self.sentence))
+        text_now = "Dans {} je ferai l'action: {}".format(str(self.durationRaw), str(self.sentence))
         self.hermes.publish_end_session(self.session_id, text_now)
 
 
@@ -201,11 +201,11 @@ def timerRemainingTime(hermes, intentMessage):
     if len_timer_list < 1:
         hermes.publish_end_session(intentMessage.session_id, "Il n'y a pas de minuteur en cours")
     else:
-        text = u''
+        text = ''
         for i, timer in enumerate(TIMER_LIST):            
-            text += u"Pour le minuteur numéro {} il reste {}".format(i + 1, timer.remaining_time_str)
+            text += "Pour le minuteur numéro {} il reste {}".format(i + 1, timer.remaining_time_str)
             if len_timer_list <= i:
-                text += u", "
+                text += ", "
         hermes.publish_end_session(intentMessage.session_id, text)
             
 def timerList(hermes, intentMessage):
